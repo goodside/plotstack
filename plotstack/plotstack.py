@@ -2,7 +2,6 @@ from dataclasses import dataclass, field, astuple
 from typing import Any
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-import pandas as pd
 
 
 InchSize = int | float
