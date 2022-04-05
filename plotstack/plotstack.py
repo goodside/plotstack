@@ -29,13 +29,13 @@ class PlotStack:
     figure: plt.Figure = None
     subplot_width: InchSize = 10
     subplot_height: InchSize = 3
-    _subplot_heights: list[InchSize] = field(init=False)
+    height_ratios: list[InchSize] = field(init=False)
 
     def __post_init__(self):
         # Create new `Figure` if needed:
         if self.figure is None:
             self.figure = plt.figure()
-        self._subplot_heights = []
+        self.height_ratios = []
 
     @property
     def nrows(self) -> int:
@@ -53,11 +53,11 @@ class PlotStack:
 
         if height is None:
             height = self.subplot_height
-        self._subplot_heights.append(height)
+        self.height_ratios.append(height)
 
         # Set all existing subplot `Axes` to use new, expanded `GridSpec`:
         gs = mpl.gridspec.GridSpec(
-            self.nrows + 1, 1, figure=self.figure, height_ratios=self._subplot_heights
+            self.nrows + 1, 1, figure=self.figure, height_ratios=self.height_ratios
         )
         for i, ax in enumerate(self.figure.axes):
             ax.set_subplotspec(mpl.gridspec.SubplotSpec(gs, i))
@@ -65,7 +65,7 @@ class PlotStack:
         # Create new subplot `Axes`:
         ax = self.figure.add_subplot(gs.nrows, 1, len(self.axes) + 1)
 
-        self.set_size_inches(self.subplot_width, sum(self._subplot_heights))
+        self.set_size_inches(self.subplot_width, sum(self.height_ratios))
 
         # Return newly created `Axes`, mirroring semantics of `Figure.add_subplot`:
         return ax

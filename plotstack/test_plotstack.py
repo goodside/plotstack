@@ -16,5 +16,5 @@ def test_plotstack_dimensions():
     df.plot(ax=stack.add_subplot(height=2))
 
     assert stack.nrows == 3
-    assert sum(stack._subplot_heights) == 6
+    assert sum(stack.height_ratios) == 6
     assert stack.subplot_width == 10
